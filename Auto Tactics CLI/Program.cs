@@ -1,3 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿Unit warrior = new Unit("Guerrero", 12, 4);
+Unit archer = new Unit("Arquero", 6, 2);
 
-Console.WriteLine("Hello, World!");
+archer.TakeDamage(warrior.Damage);
+
+Console.WriteLine(warrior.Health);
+Console.WriteLine(archer.Health);
