@@ -25,4 +25,25 @@ public class Army
     {
         return units[position];
     }
+
+    public void Swap(int first, int second)
+    {
+        Unit temporary = units[first];
+        units[first] = units[second] ;
+        units[second] = temporary;
+    }
+
+    public List<Unit> GetAliveUnits()
+    {
+        List<Unit> aliveUnits = new List<Unit>();
+        foreach (Unit unit in units)
+        {
+            if (unit.IsAlive)
+            {
+                aliveUnits.Add(unit);
+            }
+        }
+        
+        return aliveUnits;
+    }
 }
