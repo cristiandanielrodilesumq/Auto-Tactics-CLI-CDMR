@@ -1,21 +1,28 @@
 public class Player
 {
-  public int Gold { get; private set; } = 0;
+    private const int ArmyCapacity = 3;
 
-  public void Earn(int amount)
-  {
-    Gold = Math.Max(Gold + amount, 0);
-  }
-  public bool TrySpend(int amount)
-  {
-    if (amount > Gold)
+    public int Gold { get; private set; }
+    public Army Army { get; }
+
+    public Player()
     {
-      return false;
+        Gold = 0;
+        Army = new Army(ArmyCapacity);
     }
-    else
+
+    public void Earn(int amount)
     {
-      Gold = Gold - amount;
-      return true;
+        Gold += amount;
     }
-  }
+
+    public bool TrySpend(int amount)
+    {
+        if (amount > Gold)
+        {
+            return false;
+        }
+        Gold -= amount;
+        return true;
+    }
 }
