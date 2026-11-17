@@ -1,26 +1,16 @@
 ﻿ConsoleView view = new ConsoleView();
+List<Army> waves = new WaveData().CreateWaves();
+
 Player player = new Player();
+player.Army.TryAdd(new Unit("Guerrero", 12, 4, 1));
+player.Army.TryAdd(new Unit("Arquero", 6, 2, 1));
 
-player.Army.TryAdd(new Unit("Guerrero", 12, 4));
-player.Army.TryAdd(new Unit("Arquero", 6, 2));
-player.Army.TryAdd(new Unit("Mago", 4, 2));
+// waves[0] es la oleada 1: la lista empieza en 0.
+Battle battle = new Battle(player.Army, waves[0]);
+view.ShowMessage("Combate contra la oleada 1 (solo ataca el jugador)");
 
-// La fila ya tiene 3 unidades: la cuarta se rechaza.
-if (!player.Army.TryAdd(new Unit("Guerrero", 12, 4)))
+for (int i = 0; i < 4; i++)
 {
-    view.ShowMessage("La fila está llena: el cuarto Guerrero no entra.");
-}
-view.ShowArmy("Fila inicial", player.Army);
-
-player.Army.Swap(0, 2);
-view.ShowArmy("Fila Después del Intercambio de Pocisiones 1 y 3",  player.Army);
-
-var mage = player.Army.GetUnit(0);
-mage.TakeDamage(10);
-
-view.ShowArmy("Fila Después de Recibir Daño", player.Army);
-var aliveUnits = player.Army.GetAliveUnits();
-foreach (var unit in aliveUnits)
-{
-    Console.WriteLine(unit.Name);
+    BattleEvent battleEvent = battle.NextTurn();
+    view.ShowTurn(battle, battleEvent);
 }

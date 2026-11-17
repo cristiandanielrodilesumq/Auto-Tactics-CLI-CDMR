@@ -5,6 +5,7 @@ public class Army
     public int Capacity { get; }
     public int Count => units.Count;
     public bool IsFull => units.Count >= Capacity;
+    public bool IsDefeated => GetAliveUnits().Count == 0;
 
     public Army(int capacity)
     {
@@ -25,7 +26,12 @@ public class Army
     {
         return units[position];
     }
-
+    
+    public int GetPosition(Unit unit)
+    {
+        return units.IndexOf(unit);
+    }
+    
     public void Swap(int first, int second)
     {
         Unit temporary = units[first];
