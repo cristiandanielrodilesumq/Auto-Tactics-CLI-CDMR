@@ -6,11 +6,12 @@ player.Army.TryAdd(new Unit("Guerrero", 12, 4, 1));
 player.Army.TryAdd(new Unit("Arquero", 6, 2, 1));
 
 // waves[0] es la oleada 1: la lista empieza en 0.
-Battle battle = new Battle(player.Army, waves[0]);
-view.ShowMessage("Combate contra la oleada 1 (solo ataca el jugador)");
+Battle battle = new Battle(player.Army, waves[4]);
+view.ShowMessage("Combate contra la oleada 5");
 
-for (int i = 0; i < 4; i++)
+while (!battle.IsOver)
 {
     BattleEvent battleEvent = battle.NextTurn();
     view.ShowTurn(battle, battleEvent);
 }
+view.ShowResult(battle);
