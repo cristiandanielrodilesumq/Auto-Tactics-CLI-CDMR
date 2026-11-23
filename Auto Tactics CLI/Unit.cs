@@ -1,22 +1,31 @@
-public class Unit
+// Unidad de combate: base común de todas las unidades del juego.
+// Es abstracta porque no existe una "unidad" genérica: siempre es un Guerrero, un Arquero, etc.
+public abstract class Unit
 {
     public string Name { get; }
     public int MaxHealth { get; }
     public int Health { get; private set; }
     public int Damage { get; }
+    public int Cost { get; }
     public int Stars { get; }
-    
+
+    // Propiedad calculada: se evalúa cada vez que se consulta.
     public bool IsAlive => Health > 0;
 
-    public Unit(string name, int baseHealth, int baseDamage, int stars)
+    // protected: solo las clases derivadas pueden llamar a este constructor.
+    protected Unit(string name, int baseHealth, int baseDamage, int cost, int stars)
     {
         Name = name;
+        Cost = cost;
         Stars = stars;
         // Las estrellas escalan la vida y el daño una sola vez, al crear la unidad.
         MaxHealth = ApplyStars(baseHealth);
         Damage = ApplyStars(baseDamage);
         Health = MaxHealth;
     }
+
+    // Cada tipo de unidad responde a su manera: ¿puedo atacar desde esta posición?
+    public abstract bool CanAttackFrom(int position);
 
     public void TakeDamage(int amount)
     {

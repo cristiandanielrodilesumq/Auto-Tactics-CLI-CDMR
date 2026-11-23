@@ -1,13 +1,14 @@
 ﻿ConsoleView view = new ConsoleView();
-List<Army> waves = new WaveData().CreateWaves();
+List<Army> waves= new WaveData().CreateWaves();
 
 Player player = new Player();
-player.Army.TryAdd(new Unit("Guerrero", 12, 4, 1));
-player.Army.TryAdd(new Unit("Arquero", 6, 2, 1));
+player.Army.TryAdd(new Warrior(1));
+player.Army.TryAdd(new Archer(1));
+player.Army.TryAdd(new Mage(1));
 
-// waves[0] es la oleada 1: la lista empieza en 0.
-Battle battle = new Battle(player.Army, waves[4]);
-view.ShowMessage("Combate contra la oleada 5");
+// Waves[1] es la oleada 2: la lista empieza en 0.
+Battle battle = new Battle(player.Army, waves[1]);
+view.ShowMessage("Combate Contra la Oleada 2");
 
 while (!battle.IsOver)
 {
