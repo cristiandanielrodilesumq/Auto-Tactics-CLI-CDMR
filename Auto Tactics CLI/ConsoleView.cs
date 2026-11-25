@@ -6,11 +6,38 @@ public class ConsoleView
     private const string SingleLine = "------------------------------------------------------------------";
     private const int UnitTextWidth = 13;
     private const int PlayerColumnWidth = 25;
+    private const int MessagePause = 1500;
 
     public ConsoleView()
     {
         // El primer uso de ConsoleKit configura la consola en UTF-8 (acentos, ★ y →).
         ConsoleKit.Clear();
+    }
+
+    public void ShowPreparation(Player player, Shop shop, Army wave, int waveNumber, int waveCount)
+    {
+        ConsoleKit.Clear();
+        Console.WriteLine(DoubleLine);
+        Console.WriteLine($" RONDA {waveNumber}/{waveCount}  |  Oro: {player.Gold}  |  Fila: {player.Army.Count}/{player.Army.Capacity}");
+        Console.WriteLine(SingleLine);
+        ShowArmies(player.Army, wave, $"OLEADA {waveNumber}");
+        Console.WriteLine(SingleLine);
+        Console.WriteLine($" TIENDA: {FormatOffers(shop)}");
+        Console.WriteLine(DoubleLine);
+        Console.WriteLine($" [C]omprar  [V]ender  [M]over  [R]eroll ({shop.RerollCost})  [B]atalla");
+    }
+
+    public char AskAction()
+    {
+        Console.Write(" Acción: ");
+        return ConsoleKit.ReadOption("CVMRB");
+    }
+
+    // Pide un número entre 1 y max y lo devuelve como índice del código (desde 0).
+    public int AskPosition(string question, int max)
+    {
+        Console.Write($" {question} (1-{max}): ");
+        return ConsoleKit.ReadNumber(1, max) - 1;
     }
 
     // Bitácora de nivel 1: una línea por turno, impresa de corrido.
@@ -39,6 +66,7 @@ public class ConsoleView
     public void ShowMessage(string text)
     {
         Console.WriteLine($" {text}");
+        ConsoleKit.Pause(MessagePause);
     }
 
     // Dibuja las dos filas lado a lado; la posición 1 es el frente.
@@ -80,6 +108,27 @@ public class ConsoleView
         return ConsoleKit.PadRight(unit.ToString(), UnitTextWidth) + $"{unit.Health}/{unit.MaxHealth}";
     }
 
+    private string FormatOffers(Shop shop)
+    {
+        string text = "";
+        for (int i = 0; i < shop.OfferCount; i++)
+        {
+            Unit? offer = shop.GetOffer(i);
+            string offerText = "---";
+            if (offer != null)
+            {
+                offerText = $"{offer.Name} ({offer.Cost})";
+            }
+
+            if (i > 0)
+            {
+                text += "  |  ";
+            }
+            text += $"[{i + 1}] {offerText}";
+        }
+        return text;
+    }
+
     private string DescribeTurn(Battle battle, BattleEvent battleEvent)
     {
         string text = $"Turno {battle.TurnCount} | {Label(battle, battleEvent.Attacker)}";
@@ -87,6 +136,7 @@ public class ConsoleView
         {
             return text + " no alcanza";
         }
+
         text += " ataca a ";
         for (int i = 0; i < battleEvent.Targets.Count; i++)
         {
