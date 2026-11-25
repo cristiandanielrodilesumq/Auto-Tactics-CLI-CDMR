@@ -77,12 +77,17 @@ public class ConsoleView
 
     private string FormatUnit(Unit unit)
     {
-        return ConsoleKit.PadRight($"{unit.Name} {unit.Stars}★", UnitTextWidth) + $"{unit.Health}/{unit.MaxHealth}";
+        return ConsoleKit.PadRight(unit.ToString(), UnitTextWidth) + $"{unit.Health}/{unit.MaxHealth}";
     }
 
     private string DescribeTurn(Battle battle, BattleEvent battleEvent)
     {
-        string text = $"Turno {battle.TurnCount} | {Label(battle, battleEvent.Attacker)} ataca a ";
+        string text = $"Turno {battle.TurnCount} | {Label(battle, battleEvent.Attacker)}";
+        if (battleEvent.Blocked)
+        {
+            return text + " no alcanza";
+        }
+        text += " ataca a ";
         for (int i = 0; i < battleEvent.Targets.Count; i++)
         {
             Unit target = battleEvent.Targets[i];

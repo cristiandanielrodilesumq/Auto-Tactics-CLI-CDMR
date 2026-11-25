@@ -49,6 +49,11 @@ public abstract class Unit
         }
         return targets;
     }
+    
+    public override string ToString()
+    {
+        return $"{Name} {Stars}★";
+    }
 
     private int ApplyStars(int baseValue)
     {

@@ -21,6 +21,13 @@ public class Army
         units.Add(unit);
         return true;
     }
+    
+    public Unit RemoveAt(int position)
+    {
+        Unit removed = units[position];
+        units.RemoveAt(position);
+        return removed;
+    }
 
     public Unit GetUnit(int position)
     {
@@ -51,5 +58,10 @@ public class Army
         }
         
         return aliveUnits;
+    }
+    // Lugar de la unidad entre las unidades vivas: cuando cae el frente, las de atrás avanzan.
+    public int GetCombatPosition(Unit unit)
+    {
+        return GetAliveUnits().IndexOf(unit);
     }
 }

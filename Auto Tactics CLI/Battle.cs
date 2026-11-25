@@ -27,14 +27,14 @@ public class Battle
         PlayerArmy = playerArmy;
         EnemyArmy = enemyArmy;
     }
-
+    
     // Resuelve un turno. Solo debe llamarse mientras IsOver sea false.
     public BattleEvent NextTurn()
     {
         Army attackers;
         Army defenders;
         int cursor;
-
+ 
         if (isPlayerTurn)
         {
             attackers = PlayerArmy;
@@ -47,12 +47,23 @@ public class Battle
             defenders = PlayerArmy;
             cursor = enemyCursor;
         }
-
+ 
         cursor = FindNextAlive(attackers, cursor);
         Unit attacker = attackers.GetUnit(cursor);
-        List<Unit> targets = attacker.Attack(defenders);
-        BattleEvent battleEvent = new BattleEvent(attacker, targets, attacker.Damage);
-
+        int combatPosition = attackers.GetCombatPosition(attacker);
+ 
+        BattleEvent battleEvent;
+        if (attacker.CanAttackFrom(combatPosition))
+        {
+            List<Unit> targets = attacker.Attack(defenders);
+            battleEvent = new BattleEvent(attacker, targets, attacker.Damage, false);
+        }
+        else
+        {
+            // Pierde su turno: no alcanza a ningún enemigo.
+            battleEvent = new BattleEvent(attacker, new List<Unit>(), 0, true);
+        }
+ 
         // Se guarda el cursor del bando que actuó y se cede el turno al otro bando.
         if (isPlayerTurn)
         {
@@ -63,7 +74,7 @@ public class Battle
             enemyCursor = cursor;
         }
         isPlayerTurn = !isPlayerTurn;
-
+ 
         log.Add(battleEvent);
         return battleEvent;
     }
