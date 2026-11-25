@@ -1,17 +1,25 @@
 ﻿ConsoleView view = new ConsoleView();
-List<Army> waves= new WaveData().CreateWaves();
-
 Player player = new Player();
-player.Army.TryAdd(new Archer(1));
-player.Army.TryAdd(new Warrior(1));
+Shop shop = new Shop();
+player.Earn(3);
+shop.Refresh();
 
-// Waves[1] es la oleada 2: la lista empieza en 0.
-Battle battle = new Battle(player.Army, waves[0]);
-view.ShowMessage("Combate Contra la Oleada 1");
+// Prueba 1: comprar y vender.
+view.ShowMessage($"Oro: {player.Gold} | Fila: {player.Army.Count}/{player.Army.Capacity}");
+Unit? offer = shop.GetOffer(0);
+bool bought = shop.TryBuy(0, player);
+view.ShowMessage($"Compré {offer}: {bought} | Oro: {player.Gold} | Fila: {player.Army.Count}/{player.Army.Capacity}");
 
-while (!battle.IsOver)
+bool boughtAgain = shop.TryBuy(0, player);
+view.ShowMessage($"Mismo espacio otra vez: {boughtAgain} | Oro: {player.Gold}");
+
+shop.Sell(0, player);
+view.ShowMessage($"Vendí la unidad | Oro: {player.Gold} | Fila: {player.Army.Count}/{player.Army.Capacity}");
+
+// Prueba 2: renovar cuatro veces.
+for (int i = 0; i < 4; i++)
 {
-    BattleEvent battleEvent = battle.NextTurn();
-    view.ShowTurn(battle, battleEvent);
+    int goldBefore = player.Gold;
+    bool rerolled = shop.TryReroll(player);
+    view.ShowMessage($"Renovar: {rerolled} | Oro: {goldBefore} → {player.Gold}");
 }
-view.ShowResult(battle);
