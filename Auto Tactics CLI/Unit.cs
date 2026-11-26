@@ -32,6 +32,11 @@ public abstract class Unit
         // La vida nunca baja de 0.
         Health = Math.Max(Health - amount, 0);
     }
+    
+    public void Restore()
+    {
+        Health = MaxHealth;
+    }
 
     public List<Unit> Attack(Army enemies)
     {

@@ -64,4 +64,12 @@ public class Army
     {
         return GetAliveUnits().IndexOf(unit);
     }
+    
+    public void RestoreAll()
+    {
+        foreach (Unit unit in units)
+        {
+            unit.Restore();
+        }
+    }
 }
