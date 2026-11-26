@@ -8,6 +8,8 @@ public class Player
     public Player()
     {
         Gold = 0;
+        Health = StartingHealth;
+        MaxHealth = StartingHealth;
         Army = new Army(ArmyCapacity);
     }
 
@@ -22,7 +24,18 @@ public class Player
         {
             return false;
         }
+
         Gold -= amount;
         return true;
+    }
+
+    private const int StartingHealth = 15;
+    public int MaxHealth { get; }
+    public int Health { get; private set; }
+    public bool IsDefeated => Health == 0;
+
+    public void TakeDamage(int amount)
+    {
+        Health = Math.Max(Health - amount, 0);
     }
 }

@@ -18,7 +18,7 @@ public class ConsoleView
     {
         ConsoleKit.Clear();
         Console.WriteLine(DoubleLine);
-        Console.WriteLine($" RONDA {waveNumber}/{waveCount}  |  Oro: {player.Gold}  |  Fila: {player.Army.Count}/{player.Army.Capacity}");
+        Console.WriteLine($" RONDA {waveNumber}/{waveCount}  |  Vida: {player.Health}/{player.MaxHealth}  |  Oro: {player.Gold}  |  Fila: {player.Army.Count}/{player.Army.Capacity}");
         Console.WriteLine(SingleLine);
         ShowArmies(player.Army, wave, $"OLEADA {waveNumber}");
         Console.WriteLine(SingleLine);

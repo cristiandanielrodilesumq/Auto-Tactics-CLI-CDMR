@@ -43,7 +43,6 @@ public class Game
         }
     }
     
-    // PROVISIONAL: arma una fila fija para poder probar el bucle. Se reemplaza en «Tú haces».
     private void RunPreparation()
     {
         player.Earn(GoldPerRound);
@@ -53,6 +52,7 @@ public class Game
         {
             player.Army.TryAdd(new Warrior(1));
             player.Army.TryAdd(new Archer(1));
+            player.Army.TryAdd(new Warrior(1));
         }
         phase = GamePhase.Combat;
     }
@@ -72,10 +72,35 @@ public class Game
         phase = GamePhase.Resolution;
     }
 
-// PROVISIONAL: solo muestra lo que guardó el combate y termina la partida. Se reemplaza en «Tú haces».
     private void RunResolution()
     {
-        view.ShowMessage($"Resolución provisional. ¿Ganó el jugador? {lastBattleWon}. Enemigos vivos: {lastSurvivorCount}");
-        phase = GamePhase.Victory;
+        if (!lastBattleWon)
+        {
+            int damage = lastSurvivorCount * DamagePerSurvivor;
+            player.TakeDamage(damage);
+            view.ShowMessage($"Recibes {damage} de daño. Vida: {player.Health}/{player.MaxHealth}");
+        }
+
+        // Siempre: ambos ejércitos se curan por completo.
+        player.Army.RestoreAll();
+        waves[currentWave].RestoreAll();
+
+        if (player.IsDefeated)
+        {
+            phase = GamePhase.Defeat;
+            return;
+        }
+
+        if (lastBattleWon)
+        {
+            currentWave = currentWave + 1;
+            if (currentWave == waves.Count)
+            {
+                phase = GamePhase.Victory;
+                return;
+            }
+        }
+
+        phase = GamePhase.Preparation;
     }
 }
